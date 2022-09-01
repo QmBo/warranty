@@ -3,6 +3,6 @@
 
 <@h.home "Главная">
 
-  <label>Панель управления</label>
+  <label>Привет!</label>
 
 </@h.home>

@@ -9,7 +9,9 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="subscribe"><i class="fa fa-comment mr-1"></i>Подписки</a></li>
+        <li class="nav-item"><a class="nav-link" href="warranty"><i class="fa fa-microchip mr-1"></i>Гарантии</a></li>
+        <li class="nav-item"><a class="nav-link" href="warranty/add"><i class="fa fa-pencil-square-o mr-1"></i>Добавить гарантию</a></li>
+        <#if isLoggedIn>
         <#if isAdmin>
           <li class="nav-item"><a class="nav-link" href="users"><i class="fa fa-user-secret mr-1"></i>Пользователи</a></li>
         </#if>
@@ -23,6 +25,9 @@
       <span class="navbar-text">
         <i>${username}</i>
       </span>
+      <#else>
+        </ul>
+      </#if>
     </div>
 
   </div>
