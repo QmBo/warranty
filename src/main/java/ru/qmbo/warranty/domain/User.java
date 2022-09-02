@@ -1,4 +1,4 @@
-package ru.qmbo.warranty.model;
+package ru.qmbo.warranty.domain;
 
 
 

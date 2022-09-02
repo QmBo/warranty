@@ -25,8 +25,8 @@
     <button class="btn btn-success" type="submit">Записать</button>
 
   </form>
-  <#if product??>
-    <label>${product.name!!}</label>
+  <#if warranty??>
+    <label>${warranty.product.name!!}</label>
   </#if>
 
   <script>

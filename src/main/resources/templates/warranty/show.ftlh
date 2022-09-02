@@ -16,8 +16,8 @@
 
     <button class="btn btn-success" type="submit">Отправить</button>
   </form>
-  <#if product??>
-    <label>${product.name!!}</label>
+  <#if warranty??>
+    <label>${warranty.product.name!!}</label>
   </#if>
 
 </@h.home>

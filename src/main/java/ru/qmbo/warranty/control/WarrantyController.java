@@ -6,11 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.condition.RequestConditionHolder;
-import org.springframework.web.servlet.support.RequestContext;
-import ru.qmbo.warranty.model.Product;
-
-import javax.servlet.ServletRequest;
+import ru.qmbo.warranty.domain.Warranty;
+import ru.qmbo.warranty.domain.Product;
+import ru.qmbo.warranty.service.WarrantyService;
 
 /**
  * InfoController class.
@@ -23,12 +21,16 @@ import javax.servlet.ServletRequest;
 @RequestMapping("/warranty")
 public class WarrantyController {
 
+    private final WarrantyService warrantyService;
+
+    public WarrantyController(WarrantyService warrantyService) {
+        this.warrantyService = warrantyService;
+    }
+
     @GetMapping
     public String getInformationAboutSN(Model model, @RequestParam(name = "sn", required = false) String serialNumber) {
         if (serialNumber != null && !serialNumber.isEmpty()) {
-            Product product = new Product();
-            product.setName("Dune HD Magic 4K");
-            model.addAttribute("product", product);
+            model.addAttribute("warranty", warrantyService.getWarranty(serialNumber));
         }
         return "warranty/show";
     }
@@ -44,7 +46,7 @@ public class WarrantyController {
         if (serialNumber != null && !serialNumber.isEmpty()) {
             Product product = new Product();
             product.setName("Dune HD Magic 4K");
-            model.addAttribute("product", product);
+            model.addAttribute("warranty", new Warranty().setProduct(product));
         } else {
             model.addAttribute("Error", "Серийный номер не может быть пустым!");
         }

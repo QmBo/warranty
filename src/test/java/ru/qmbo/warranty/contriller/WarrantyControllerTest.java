@@ -6,13 +6,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.qmbo.warranty.model.Product;
+import org.springframework.test.web.servlet.MvcResult;
+import ru.qmbo.warranty.domain.Warranty;
+import ru.qmbo.warranty.domain.Product;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,13 +36,13 @@ public class WarrantyControllerTest {
 
     @Test
     public void whenGetInfoAndSNThenDefaultPageAndAnswer() throws Exception {
-        Product product = new Product();
-        product.setName("Dune HD Magic 4K");
-        this.mockMvc.perform(get("/warranty?sn=FC175Q001212100976"))
+        MvcResult result = this.mockMvc.perform(get("/warranty?sn=FC175Q001212100976"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("warranty/show"))
-                .andExpect(model().attribute("product", product));
+                .andReturn();
+        Warranty resultWarranty = (Warranty) result.getModelAndView().getModel().get("warranty");
+        assertThat(resultWarranty.getSerialNumber(), is("FC175Q001212100976"));
     }
 
 
@@ -52,8 +56,8 @@ public class WarrantyControllerTest {
 
     @Test
     public void whenPostSNThenWriteAndReturnProduct() throws Exception {
-        Product product = new Product();
-        product.setName("Dune HD Magic 4K");
+        Product product = new Product().setName("Dune HD Magic 4K");
+        Warranty warranty = new Warranty().setProduct(product);
         this.mockMvc.perform(post("/warranty/add")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -61,6 +65,6 @@ public class WarrantyControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("warranty/add"))
-                .andExpect(model().attribute("product", product));
+                .andExpect(model().attribute("warranty", warranty));
     }
 }
