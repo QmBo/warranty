@@ -21,4 +21,6 @@ public class Warranty {
     private Date date;
     @Column(nullable = false)
     private String serialNumber;
+    @Transient
+    private Date buildDate;
 }
