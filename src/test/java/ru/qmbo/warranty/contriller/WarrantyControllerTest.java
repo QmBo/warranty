@@ -15,7 +15,6 @@ import ru.qmbo.warranty.domain.Product;
 import ru.qmbo.warranty.repository.WarrantyRepository;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
@@ -76,6 +75,8 @@ public class WarrantyControllerTest {
     @Test
     public void whenPostSNThenWriteAndReturnWarranty() throws Exception {
         Calendar calendar = Calendar.getInstance();
+        calendar.setMinimalDaysInFirstWeek(4);
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
         calendar.set(Calendar.HOUR, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
@@ -117,6 +118,8 @@ public class WarrantyControllerTest {
                 .andReturn();
         Warranty resultWarranty = (Warranty) result.getModelAndView().getModel().get("warranty");
         Calendar calendar = Calendar.getInstance();
+        calendar.setMinimalDaysInFirstWeek(4);
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
         calendar.set(2021, Calendar.MAY, 30, 0, 0, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         assertThat(resultWarranty.getBuildDate().getTime(), is(calendar.getTimeInMillis()));
