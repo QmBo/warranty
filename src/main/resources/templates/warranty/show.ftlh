@@ -8,8 +8,8 @@
 
   <form action="/warranty" method="get">
     <div class="mb-3">
-      <label for="sn" class="form-label">Серийный номер:</label>
-      <input type="text" class="form-control" id="sn" name="sn" autofocus="autofocus" minlength="18" maxlength="18" required>
+      <label for="serialNumber" class="form-label">Серийный номер:</label>
+      <input type="text" class="form-control" id="serialNumber" name="serialNumber" autofocus="autofocus" minlength="18" maxlength="18" style="text-transform:uppercase">
       <#if error??><div class="text-danger">${error!}</div></#if>
     </div>
 

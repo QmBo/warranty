@@ -1,3 +1,4 @@
+<#--noinspection HtmlUnknownTarget-->
 <#include "security.ftlh">
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -11,6 +12,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="warranty"><i class="fa fa-microchip mr-1"></i>Гарантии</a></li>
         <li class="nav-item"><a class="nav-link" href="warranty/add"><i class="fa fa-pencil-square-o mr-1"></i>Добавить гарантию</a></li>
+        <li class="nav-item"><a class="nav-link" href="products"><i class="fa-solid fa-boxes-stacked"></i>Продукты</a></li>
         <#if isLoggedIn>
         <#if isAdmin>
           <li class="nav-item"><a class="nav-link" href="users"><i class="fa fa-user-secret mr-1"></i>Пользователи</a></li>
