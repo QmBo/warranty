@@ -43,7 +43,7 @@ public class WarrantyController {
      * @return the information about sn
      */
     @GetMapping
-    public String getInformationAboutSN(Model model, @RequestParam(name = "sn", required = false) String serialNumber) {
+    public String getInformationAboutSN(Model model, @RequestParam(required = false) String serialNumber) {
         if (serialNumber != null && !serialNumber.isEmpty()) {
             model.addAttribute(WARRANTY, warrantyService.getWarranty(serialNumber));
         } else if (serialNumber != null) {

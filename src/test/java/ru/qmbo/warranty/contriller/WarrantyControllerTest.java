@@ -54,7 +54,7 @@ public class WarrantyControllerTest {
 
     @Test
     public void whenGetInfoAndSNThenDefaultPageAndAnswer() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/warranty?sn=FC175Q001212100976"))
+        MvcResult result = this.mockMvc.perform(get("/warranty?serialNumber=FC175Q001212100976"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("warranty/show"))
