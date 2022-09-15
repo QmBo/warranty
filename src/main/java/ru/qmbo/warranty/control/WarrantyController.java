@@ -1,5 +1,6 @@
 package ru.qmbo.warranty.control;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.qmbo.warranty.domain.Warranty;
 import ru.qmbo.warranty.service.WarrantyService;
+
+import java.security.Principal;
 
 /**
  * InfoController class.
@@ -43,7 +46,7 @@ public class WarrantyController {
      * @return the information about sn
      */
     @GetMapping
-    public String getInformationAboutSN(Model model, @RequestParam(required = false) String serialNumber) {
+    public String getInformationAboutSN(Model model, @RequestParam(required = false) String serialNumber, Principal principal) {
         if (serialNumber != null && !serialNumber.isEmpty()) {
             model.addAttribute(WARRANTY, warrantyService.getWarranty(serialNumber));
         } else if (serialNumber != null) {
@@ -59,7 +62,8 @@ public class WarrantyController {
      * @return the string
      */
     @GetMapping("/add")
-    public String warrantyAddForm() {
+    @PreAuthorize("hasAuthority('MODER') || hasAuthority('ADMIN')")
+    public String getWarrantyAddPage() {
         return "warranty/add";
     }
 
@@ -71,6 +75,7 @@ public class WarrantyController {
      * @return the string
      */
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('MODER') || hasAuthority('ADMIN')")
     public String addProductToDB(
             Model model, @RequestParam(name = "sn") String serialNumber,
             @RequestParam(required = false) String date) {

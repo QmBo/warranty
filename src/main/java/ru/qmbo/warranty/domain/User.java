@@ -1,114 +1,44 @@
 package ru.qmbo.warranty.domain;
 
-
-
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
-import java.util.StringJoiner;
 
+@Data
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
-    @SequenceGenerator(name = "users_seq", sequenceName = "users_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
-//    @NotBlank(message = "Fill in the name")
-//    @Size(max = 255, message = "Name too long (more than 255 characters)")
+    @NotBlank(message = "Fill in the name")
+    @Size(max = 255, message = "Name too long (more than 255 characters)")
     private String name;
 
     @Column(unique = true, nullable = false)
-//    @NotBlank(message = "Fill in the username")
-//    @Size(max = 255, message = "Username too long (more than 255 characters)")
+    @NotBlank(message = "Fill in the username")
+    @Size(max = 255, message = "Username too long (more than 255 characters)")
     private String username;
 
     @Column(nullable = false)
-//    @Size(max = 255, message = "Password too long (more than 255 characters)")
+    @Size(max = 255, message = "Password too long (more than 255 characters)")
     private String password;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public User setId(Integer id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-
-    public Role getRole() {
-        return role;
-    }
-
-    public User setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public User setUsername(String username) {
-        this.username = username;
-        return this;
-    }
-
-    public User setPassword(String password) {
-        this.password = password;
-        return this;
-    }
-
-    public User setRole(Role role) {
-        this.role = role;
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name)
-                && Objects.equals(username, user.username) && Objects.equals(password, user.password)
-                && role == user.role;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, username, password, role);
-    }
+    @Column(name = "is_active", nullable = false)
+    private boolean active;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -139,16 +69,7 @@ public class User implements UserDetails {
         return this.getRole().equals(Role.ADMIN);
     }
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("name='" + name + "'")
-                .add("username='" + username + "'")
-                .add("password='" + password + "'")
-                .add("role=" + role)
-                .toString();
-    }
+
 
     public enum Role implements GrantedAuthority {
 

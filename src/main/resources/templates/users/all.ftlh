@@ -1,10 +1,12 @@
 <#import "../macros/home.ftlh" as h>
 <#import "../macros/table.ftlh" as t>
+<#-- @ftlvariable name="users" type="java.util.List<ru.qmbo.warranty.domain.User>" -->
 
 <@h.home "Список пользователей">
 
   <div class="row ">
-    <div class="col-md-4">
+    <div class="mx-auto" style="width: 200px;padding-bottom: 10px;">
+      <#--noinspection HtmlUnknownTarget-->
       <a class="btn btn-sm btn-info" href="users/add">Добавить пользователя</a>
     </div>
   </div>

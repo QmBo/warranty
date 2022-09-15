@@ -6,7 +6,7 @@
 
 <@h.home "Список Продуктов">
 
-  <div class="mb-4" style="text-align: center;">
+  <div class="mx-auto" style="width: 200px;padding-bottom: 10px;">
     <#--noinspection HtmlUnknownTarget-->
     <a class="btn btn-sm btn-info" href="products/add">Добавить продукт</a>
   </div>

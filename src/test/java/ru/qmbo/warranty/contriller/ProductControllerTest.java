@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import ru.qmbo.warranty.domain.Product;
@@ -44,6 +45,7 @@ public class ProductControllerTest {
 
     /** @noinspection unchecked*/
     @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenGetAllThenReturnAll() throws Exception {
         Product product = new Product()
                 .setId(1)
@@ -62,6 +64,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenGetAddThenReturnAdd() throws Exception {
         this.mockMvc.perform(get("/products/add"))
                 .andDo(print())
@@ -70,6 +73,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenPostCreateThenCreate() throws Exception {
         when(productRepository.findByAbbreviature("TN")).thenReturn(Optional.empty());
         when(productRepository.findByModelName("T")).thenReturn(Optional.empty());
@@ -84,6 +88,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenPostProductWisTooLongABBRThenShowAdd() throws Exception {
         String expected = "Аббревиатура слишком длинная (больше чем 4 символов)";
         MvcResult result = this.mockMvc.perform(post("/products/create")
@@ -100,6 +105,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenPostUpdateThenUpdate() throws Exception {
         Product product = new Product()
                 .setId(1)
@@ -120,6 +126,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenPostUpdateWisTooLongModelNameThenShowAdd() throws Exception {
         String expected = "Название модели слишком длинное (больше чем 10 символов)";
         MvcResult result = this.mockMvc.perform(post("/products/update")
@@ -136,6 +143,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenPostCreateSameABBRThenShowAdd() throws Exception {
         when(productRepository.findByAbbreviature("TN")).thenReturn(Optional.of(new Product()));
         this.mockMvc.perform(post("/products/create")

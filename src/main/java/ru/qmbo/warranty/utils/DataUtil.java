@@ -1,4 +1,4 @@
-package ru.qmbo.warranty.service;
+package ru.qmbo.warranty.utils;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.Date;
  */
 @Log4j2
 @Service
-public class DataService {
+public class DataUtil {
 
     /**
      * Pars date or return current date.

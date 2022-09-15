@@ -1,105 +1,20 @@
 package ru.qmbo.warranty.service;
 
-import org.springframework.stereotype.Service;
 import ru.qmbo.warranty.domain.Product;
-import ru.qmbo.warranty.repository.ProductRepository;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
-/**
- * ProductService class.
- *
- * @author Victor Egorov (qrioflat@gmail.com).
- * @version 0.1
- * @since 13.09.2022
- */
-@Service
-public class ProductService {
+public interface ProductService {
+    Optional<Product> getProductByAbbreviature(String abbr);
 
-    private final ProductRepository productRepository;
+    Optional<Product> getProductBySerialNumber(String serialNumber);
 
-    /**
-     * Instantiates a new Product service.
-     *
-     * @param productRepository the product repository
-     */
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    List<Product> getAll();
 
-    /**
-     * Gets product abbreviature.
-     *
-     * @param abbr the abbr
-     * @return the product abbreviature
-     */
-    public Optional<Product> getProductByAbbreviature(final String abbr) {
-        return this.productRepository.findByAbbreviature(abbr.toUpperCase());
-    }
+    Optional<Product> save(Product product);
 
-    /**
-     * Gets product by serial number.
-     *
-     * @param serialNumber the serial number
-     * @return the product serial number
-     */
-    public Optional<Product> getProductBySerialNumber(final String serialNumber) {
-        String abb = serialNumber.substring(2, 6);
-        return this.getProductByAbbreviature(abb);
-    }
+    void deleteProductById(Integer id);
 
-    /**
-     * Gets all.
-     *
-     * @return the all
-     */
-    public List<Product> getAll() {
-        return this.productRepository.findAll();
-    }
-
-    /**
-     * Save.
-     *
-     * @param product the product
-     * @return the optional
-     */
-    public Optional<Product> save(Product product) {
-        return this.productRepository.findByAbbreviature(product.getAbbreviature())
-                .or(() -> this.productRepository.findByModelName(product.getModelName())
-                        .or(() -> {
-                            this.productRepository.save(this.productToUpperCase(product));
-                            return Optional.empty();
-                        })
-                );
-    }
-
-    /**
-     * Delete product by id.
-     *
-     * @param id the id
-     */
-    public void deleteProductById(Integer id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Id must bee not null.");
-        }
-        this.productRepository.delete(new Product().setId(id));
-    }
-
-    /**
-     * Update product.
-     *
-     * @param product the product
-     */
-    public void updateProduct(Product product) {
-        if (product.getId() == null) {
-            throw new IllegalArgumentException("Id must bee not null.");
-        }
-        this.productRepository.save(this.productToUpperCase(product));
-    }
-
-    private Product productToUpperCase(Product product) {
-        return product
-                .setModelName(product.getModelName().toUpperCase())
-                .setAbbreviature(product.getAbbreviature().toUpperCase());
-    }
+    void updateProduct(Product product);
 }

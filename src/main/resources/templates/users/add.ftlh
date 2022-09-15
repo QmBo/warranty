@@ -1,3 +1,5 @@
+<#--noinspection HtmlUnknownTarget-->
+<#-- @ftlvariable name="user" type="ru.qmbo.warranty.domain.User" -->
 <#import "../macros/home.ftlh" as h>
 
 <@h.home "Создание Пользователя">
@@ -16,6 +18,7 @@
       <label for="username" class="col-sm-2">Логин:</label>
       <div class="col-sm-10">
         <input id="username" class="form-control" name="username" value="<#if user??>${user.username}</#if>">
+        <#--noinspection FtlReferencesInspection-->
         <#if usernameError??><div class="text-warning">${usernameError}</div></#if>
       </div>
     </div>
@@ -43,12 +46,11 @@
 
     <#--noinspection FtlReferencesInspection-->
     <input type="hidden" name="_csrf" value="${_csrf.token}">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
       <button class="btn btn-success" type="submit">Создать</button>
-      <form method="get" action="users">
-        <button class="btn btn-info" type="submit">Назад</button>
-      </form>
-    </div>
+  </form>
+
+  <form method="get" action="users">
+    <button class="btn btn-info" type="submit">Назад</button>
   </form>
 
 </@h.home>

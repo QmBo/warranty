@@ -1,4 +1,7 @@
+<#--noinspection HtmlUnknownTarget-->
 <#import "../macros/home.ftlh" as h>
+<#-- @ftlvariable name="user" type="ru.qmbo.warranty.domain.User" -->
+<#-- @ftlvariable name="Error" type="java.lang.String" -->
 
 <@h.home "Редактировать пользователя">
 
@@ -58,21 +61,19 @@
 
       <#--noinspection FtlReferencesInspection-->
       <input type="hidden" name="_csrf" value="${_csrf.token}">
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <button class="btn btn-success" type="submit">Изменить</button>
-
-        <form method="get" action="users">
-          <button class="btn btn-info" type="submit">Назад</button>
-        </form>
-
-        <form method="post" action="users/delete">
-          <input type="hidden" name="id" value="${user.id?c}">
-          <#--noinspection FtlReferencesInspection-->
-          <input type="hidden" name="_csrf" value="${_csrf.token}">
-          <button class="btn btn-danger" type="submit">Удалить</button>
-        </form>
-      </div>
     </form>
+
+      <form method="get" action="users">
+        <button class="btn btn-info" type="submit">Назад</button>
+      </form>
+
+      <form method="post" action="users/delete">
+        <input type="hidden" name="id" value="${user.id?c}">
+        <#--noinspection FtlReferencesInspection-->
+        <input type="hidden" name="_csrf" value="${_csrf.token}">
+        <button class="btn btn-danger" type="submit">Удалить</button>
+      </form>
 
   <#else>
     <div class="alert alert-danger" role="alert">

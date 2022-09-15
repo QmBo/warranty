@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import ru.qmbo.warranty.domain.Warranty;
@@ -65,6 +66,7 @@ public class WarrantyControllerTest {
 
 
     @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenGetAddFormThenAddForm() throws Exception {
         this.mockMvc.perform(get("/warranty/add"))
                 .andDo(print())
@@ -73,6 +75,7 @@ public class WarrantyControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenPostSNThenWriteAndReturnWarranty() throws Exception {
         Calendar calendar = Calendar.getInstance();
         calendar.setMinimalDaysInFirstWeek(4);
@@ -105,6 +108,7 @@ public class WarrantyControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenPostSNExistThenReturnWarranty() throws Exception {
         Warranty warranty = new Warranty().setSerialNumber("testNumber");
         when(warrantyRepository.findBySerialNumber("FC175Q001212100976")).thenReturn(Optional.of(warranty));

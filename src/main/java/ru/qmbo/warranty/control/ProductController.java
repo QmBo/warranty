@@ -1,5 +1,10 @@
 package ru.qmbo.warranty.control;
 
+import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,9 +14,11 @@ import ru.qmbo.warranty.service.ProductService;
 import ru.qmbo.warranty.utils.ControllerUtils;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("products")
+@PreAuthorize("hasAuthority('MODER') || hasAuthority('ADMIN')")
 public class ProductController {
     public static final String PRODUCT = "product";
     public static final String PRODUCTS = "products";
@@ -24,7 +31,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public String showAllProducts(Model model) {
+    public String showAllProducts(Model model, Principal principal) {
         model.addAttribute(PRODUCTS, this.productService.getAll());
         return "products/all";
     }
