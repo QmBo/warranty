@@ -18,7 +18,7 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("products")
-@PreAuthorize("hasAuthority('MODER') || hasAuthority('ADMIN')")
+@PreAuthorize("hasAnyAuthority('MODER', 'ADMIN')")
 public class ProductController {
     public static final String PRODUCT = "product";
     public static final String PRODUCTS = "products";

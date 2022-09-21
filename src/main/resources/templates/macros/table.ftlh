@@ -1,10 +1,8 @@
 <#--noinspection HtmlUnknownTarget-->
 <#macro table name order = "desc">
 
-    <link rel="stylesheet" href="static/css/dataTables.bootstrap.css">
-    <script src="static/js/jquery.dataTables.js"></script>
-    <script src="static/js/dataTables.responsive.js"></script>
-    <script src="static/js/dataTables.bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/datatables/datatables.min.css"/>
+    <script type="text/javascript" src="static/datatables/datatables.min.js"></script>
 
     <script>
         $(document).ready(function() {

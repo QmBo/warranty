@@ -17,7 +17,7 @@ import java.util.Date;
  */
 @Log4j2
 @Service
-public class DataUtil {
+public class DateUtility {
 
     /**
      * Pars date or return current date.

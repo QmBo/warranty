@@ -1,5 +1,6 @@
 <#-- @ftlvariable name="_csrf" type="org.springframework.security.web.csrf.CsrfToken" -->
 <#-- @ftlvariable name="warranty" type="ru.qmbo.warranty.domain.Warranty" -->
+<#-- @ftlvariable name="timeZone" type="java.lang.String" -->
 <#-- @ftlvariable name="error" type="java.lang.String" -->
 <#import "../macros/home.ftlh" as h>
 <#include "../macros/security.ftlh">
@@ -21,7 +22,7 @@
     </div>
 
     <div class="mb-3">
-      <label class="form-label" for="date">Дата начала гарантии</label>
+      <label class="form-label" for="date">Дата начала гарантии:</label>
       <input type="date" class="form-control" id="date" name="date" disabled="disabled">
     </div>
 
@@ -35,7 +36,7 @@
 
   </form>
   <#if warranty??>
-    <div class="card <#if warranty.date?? && warranty.date?date?iso_utc != .now?date?iso_utc> text-white bg-danger </#if>">
+    <div class="card <#if warranty.date?? && warranty.date?date?iso(timeZone) != .now?date?iso(timeZone)> text-white bg-danger </#if>">
       <div class="card-body">
         <#if warranty.product??>
           <h5 class="card-title">${warranty.product.name!}</h5>
@@ -52,6 +53,11 @@
       </div>
     </div>
   </#if>
+
+  <#--noinspection HtmlUnknownTarget-->
+  <form method="get" action="warranty/all">
+    <button class="btn btn-info" type="submit">Назад</button>
+  </form>
 
   <script>
     function change() {

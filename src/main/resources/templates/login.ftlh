@@ -14,21 +14,23 @@
     </div>
   </#if>
 
+  <#--noinspection HtmlUnknownTarget-->
   <form action="login" method="post">
     <div class="form-group row">
       <label for="username" class="col-sm-2">Логин:</label>
       <div class="col-sm-10">
-        <input id="username" type="text" class="form-control" name="username">
+        <input id="username" type="text" class="form-control" name="username" autocomplete="username">
       </div>
     </div>
 
     <div class="form-group row">
       <label for="password" class="col-sm-2">Пароль:</label>
       <div class="col-sm-10">
-        <input id="password" type="password" class="form-control" name="password">
+        <input id="password" type="password" class="form-control" name="password" autocomplete="current-password">
       </div>
     </div>
 
+    <#--noinspection FtlReferencesInspection-->
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <button type="submit" class="btn btn-primary">Войти</button>
   </form>

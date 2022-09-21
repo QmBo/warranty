@@ -10,10 +10,10 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="warranty"><i class="fa fa-microchip mr-1"></i>Гарантии</a></li>
+        <li class="nav-item"><a class="nav-link" href="warranty"><i class="fa fa-microchip mr-1"></i>Проверка гарантии</a></li>
         <#if isLoggedIn>
         <#if isModer>
-        <li class="nav-item"><a class="nav-link" href="warranty/add"><i class="fa fa-pencil-square-o mr-1"></i>Добавить гарантию</a></li>
+        <li class="nav-item"><a class="nav-link" href="warranty/all"><i class="fa fa-pencil-square-o mr-1"></i>Все гарантии</a></li>
         <li class="nav-item"><a class="nav-link" href="products"><i class="fa-solid fa-boxes-stacked"></i>Продукты</a></li>
         </#if>
         <#if isAdmin>

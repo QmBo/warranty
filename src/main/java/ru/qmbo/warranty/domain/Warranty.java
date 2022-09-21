@@ -1,5 +1,6 @@
 package ru.qmbo.warranty.domain;
 
+import ru.qmbo.warranty.utils.DateUtility;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -23,4 +24,14 @@ public class Warranty {
     private String serialNumber;
     @Transient
     private Date buildDate;
+
+    public Warranty setDate(Date date) {
+        this.date = date;
+        return this;
+    }
+
+    public Warranty setDate(String date) {
+        this.date = DateUtility.parsDateOrCurrent(date);
+        return this;
+    }
 }

@@ -26,7 +26,9 @@ import static org.mockito.Mockito.*;
 public class WarrantyServiceTest {
 
     @Captor
-    private ArgumentCaptor<String> captor;
+    private ArgumentCaptor<String> stringCaptor;
+    @Captor
+    private ArgumentCaptor<Warranty> warrantyCaptor;
     @Mock
     private WarrantyRepository warrantyRepository;
     @Mock
@@ -40,7 +42,7 @@ public class WarrantyServiceTest {
         when(warrantyRepository.findBySerialNumber(sn)).thenReturn(Optional.empty());
         when(productRepository.findByAbbreviature(anyString())).thenReturn(Optional.empty());
         WarrantyService service = new WarrantyServiceDefault(warrantyRepository, productService);
-        Warranty result = service.getWarranty(sn);
+        Warranty result = service.getBySerialNumber(sn);
         assertThat(result.getSerialNumber(), is(sn));
     }
 
@@ -54,7 +56,7 @@ public class WarrantyServiceTest {
         when(warrantyRepository.findBySerialNumber(sn)).thenReturn(Optional.empty());
         when(productRepository.findByAbbreviature(anyString())).thenReturn(Optional.of(result));
         WarrantyService service = new WarrantyServiceDefault(warrantyRepository, productService);
-        Warranty resultWarranty = service.getWarranty(sn);
+        Warranty resultWarranty = service.getBySerialNumber(sn);
         Product resultProduct = resultWarranty.getProduct();
         assertThat(resultProduct.getName(), is(name));
         assertThat(resultProduct.getModelName(), is(modelName));
@@ -72,14 +74,14 @@ public class WarrantyServiceTest {
         when(warrantyRepository.findBySerialNumber(sn)).thenReturn(Optional.empty());
         when(productRepository.findByAbbreviature(abbr)).thenReturn(Optional.of(result));
         WarrantyService service = new WarrantyServiceDefault(warrantyRepository, productService);
-        Warranty resultWarranty = service.getWarranty(sn);
+        Warranty resultWarranty = service.getBySerialNumber(sn);
         Product resultProduct = resultWarranty.getProduct();
         assertThat(resultProduct.getName(), is(name));
         assertThat(resultProduct.getModelName(), is(modelName));
         assertThat(resultProduct.getAbbreviature(), is(abbr));
         assertThat(resultWarranty.getSerialNumber(), is("FC175F001212100976"));
-        verify(productRepository).findByAbbreviature(captor.capture());
-        assertThat(captor.getAllValues().contains(abbr), is(true));
+        verify(productRepository).findByAbbreviature(stringCaptor.capture());
+        assertThat(stringCaptor.getAllValues().contains(abbr), is(true));
     }
 
     @Test
@@ -93,7 +95,7 @@ public class WarrantyServiceTest {
         Warranty warranty = new Warranty().setProduct(product).setSerialNumber(sn).setDate(date);
         when(warrantyRepository.findBySerialNumber(sn)).thenReturn(Optional.of(warranty));
         WarrantyService service = new WarrantyServiceDefault(warrantyRepository, productService);
-        Warranty resultWarranty = service.getWarranty(sn);
+        Warranty resultWarranty = service.getBySerialNumber(sn);
         Product resultProduct = warranty.getProduct();
         assertThat(resultProduct.getName(), is(name));
         assertThat(resultProduct.getModelName(), is(modelName));
@@ -150,4 +152,70 @@ public class WarrantyServiceTest {
         Warranty resultWarranty = service.writeWarrantyIfNotExist(sn, "2022-23");
         assertThat(resultWarranty.getDate().getTime(), is(calendar.getTimeInMillis()));
     }
+
+    @Test
+    public void whenUpdateWarrantyThenTrue() {
+        Warranty warranty = new Warranty()
+                .setId(10)
+                .setDate("2020-05-09")
+                .setSerialNumber("FC175F001212100976");
+        when(productRepository.findByAbbreviature("175F"))
+                .thenReturn(Optional.of(new Product()));
+        when(warrantyRepository.findBySerialNumber("FC175F001212100976"))
+                .thenReturn(Optional.of(new Warranty().setId(10)));
+        when(warrantyRepository.save(any(Warranty.class))).thenReturn(new Warranty());
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(2020, Calendar.MAY, 9);
+        WarrantyService service = new WarrantyServiceDefault(warrantyRepository, productService);
+        assertThat(service.updateWarranty(warranty), is(true));
+        verify(warrantyRepository).save(warrantyCaptor.capture());
+        assertThat(warrantyCaptor.getValue().getId(), is(10));
+        assertThat(warrantyCaptor.getValue().getDate().getTime(), is(calendar.getTimeInMillis()));
+    }
+
+    @Test
+    public void whenUpdateSerialNumberWarrantyThenTrue() {
+        Warranty warranty = new Warranty()
+                .setId(10)
+                .setDate("2020-05-09")
+                .setSerialNumber("FC175f001212100976");
+        when(productRepository.findByAbbreviature("175F"))
+                .thenReturn(Optional.of(new Product()));
+        when(warrantyRepository.findBySerialNumber("FC175F001212100976"))
+                .thenReturn(Optional.empty());
+        when(warrantyRepository.save(any(Warranty.class))).thenReturn(new Warranty());
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(2020, Calendar.MAY, 9);
+        WarrantyService service = new WarrantyServiceDefault(warrantyRepository, productService);
+        assertThat(service.updateWarranty(warranty), is(true));
+        verify(warrantyRepository).save(warrantyCaptor.capture());
+        assertThat(warrantyCaptor.getValue().getId(), is(10));
+        assertThat(warrantyCaptor.getValue().getDate().getTime(), is(calendar.getTimeInMillis()));
+        assertThat(warrantyCaptor.getValue().getSerialNumber(), is("FC175F001212100976"));
+    }
+
+    @Test
+    public void whenUpdateSerialNumberAlreadyExistWarrantyThenFalse() {
+        Warranty warranty = new Warranty()
+                .setId(10)
+                .setDate("2020-05-09")
+                .setSerialNumber("FC175F001212100976");
+        when(productRepository.findByAbbreviature("175F"))
+                .thenReturn(Optional.of(new Product()));
+        when(warrantyRepository.findBySerialNumber("FC175F001212100976"))
+                .thenReturn(Optional.of(new Warranty().setId(1)));
+        WarrantyService service = new WarrantyServiceDefault(warrantyRepository, productService);
+        assertThat(service.updateWarranty(warranty), is(false));
+    }
+
 }

@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="static/css/bootstrap.css">
     <link rel="stylesheet" href="static/fontawesome/css/fontawesome.css">
 
-    <script src="static/js/jquery-1.10.2.js"></script>
+    <script src="static/js/jquery.js"></script>
     <script src="static/js/bootstrap.js"></script>
     <script src="https://kit.fontawesome.com/f635e67123.js" crossorigin="anonymous"></script>
 

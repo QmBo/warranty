@@ -15,9 +15,9 @@ import ru.qmbo.warranty.domain.Warranty;
 import ru.qmbo.warranty.domain.Product;
 import ru.qmbo.warranty.repository.WarrantyRepository;
 
-import java.util.Calendar;
-import java.util.Optional;
+import java.util.*;
 
+import static org.hamcrest.Matchers.contains;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -129,4 +129,34 @@ public class WarrantyControllerTest {
         assertThat(resultWarranty.getBuildDate().getTime(), is(calendar.getTimeInMillis()));
         assertThat(resultWarranty.getSerialNumber(), is("testNumber"));
     }
+
+    @Test
+    @WithMockUser(authorities = {"MODER", "ADMIN"})
+    public void whenAllThenShowAllWarrantyPage() throws Exception {
+        Product product = new Product()
+                .setId(1)
+                .setAbbreviature("175Q")
+                .setModelName("Q")
+                .setName("175 Q");
+        Warranty first = new Warranty()
+                .setId(1)
+                .setSerialNumber("FC175Q001212100976")
+                .setDate(new Date(System.currentTimeMillis()))
+                .setProduct(product);
+        Warranty second = new Warranty()
+                .setId(2)
+                .setSerialNumber("FC175Q001212100977")
+                .setDate(new Date(System.currentTimeMillis()))
+                .setProduct(product);
+        when(warrantyRepository.findAll()).thenReturn(Arrays.asList(first, second));
+        MvcResult result = this.mockMvc.perform(get("/warranty/all"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("warranty/all"))
+                .andReturn();
+        //noinspection unchecked
+        List<Warranty> warranties = (List<Warranty>) result.getModelAndView().getModel().get("warranties");
+        assertThat(warranties, contains(first, second));
+    }
+
 }
