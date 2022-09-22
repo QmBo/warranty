@@ -1,5 +1,6 @@
 package ru.qmbo.warranty.contriller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -45,6 +46,18 @@ public class WarrantyControllerTest {
     @Captor
     private ArgumentCaptor<Warranty> captor;
 
+    private Calendar calendar;
+
+    @BeforeEach
+    public void setupCalendar() {
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+    }
+
     @Test
     public void whenGetInfoThenDefaultPage() throws Exception {
         this.mockMvc.perform(get("/warranty"))
@@ -77,14 +90,6 @@ public class WarrantyControllerTest {
     @Test
     @WithMockUser(authorities = {"MODER", "ADMIN"})
     public void whenPostSNThenWriteAndReturnWarranty() throws Exception {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setMinimalDaysInFirstWeek(4);
-        calendar.setFirstDayOfWeek(Calendar.MONDAY);
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
         when(warrantyRepository.findBySerialNumber("FC175Q001212100976")).thenReturn(Optional.empty());
         when(warrantyRepository.save(any())).thenReturn(
                 new Warranty()
@@ -121,11 +126,7 @@ public class WarrantyControllerTest {
                 .andExpect(view().name("warranty/add"))
                 .andReturn();
         Warranty resultWarranty = (Warranty) result.getModelAndView().getModel().get("warranty");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setMinimalDaysInFirstWeek(4);
-        calendar.setFirstDayOfWeek(Calendar.MONDAY);
-        calendar.set(2021, Calendar.MAY, 30, 0, 0, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(2021, Calendar.MAY, 30);
         assertThat(resultWarranty.getBuildDate().getTime(), is(calendar.getTimeInMillis()));
         assertThat(resultWarranty.getSerialNumber(), is("testNumber"));
     }

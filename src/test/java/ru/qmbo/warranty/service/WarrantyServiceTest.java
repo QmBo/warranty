@@ -1,5 +1,6 @@
 package ru.qmbo.warranty.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -35,6 +36,18 @@ public class WarrantyServiceTest {
     private ProductRepository productRepository;
     @InjectMocks
     private ProductServiceDefault productService;
+
+    private Calendar calendar;
+
+    @BeforeEach
+    public void setupCalendar() {
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+    }
 
     @Test
     public void whenGetByIdThenReturnProduct() {
@@ -164,12 +177,6 @@ public class WarrantyServiceTest {
         when(warrantyRepository.findBySerialNumber("FC175F001212100976"))
                 .thenReturn(Optional.of(new Warranty().setId(10)));
         when(warrantyRepository.save(any(Warranty.class))).thenReturn(new Warranty());
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(2020, Calendar.MAY, 9);
         WarrantyService service = new WarrantyServiceDefault(warrantyRepository, productService);
         assertThat(service.updateWarranty(warranty), is(true));
@@ -189,12 +196,6 @@ public class WarrantyServiceTest {
         when(warrantyRepository.findBySerialNumber("FC175F001212100976"))
                 .thenReturn(Optional.empty());
         when(warrantyRepository.save(any(Warranty.class))).thenReturn(new Warranty());
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(2020, Calendar.MAY, 9);
         WarrantyService service = new WarrantyServiceDefault(warrantyRepository, productService);
         assertThat(service.updateWarranty(warranty), is(true));
@@ -217,5 +218,4 @@ public class WarrantyServiceTest {
         WarrantyService service = new WarrantyServiceDefault(warrantyRepository, productService);
         assertThat(service.updateWarranty(warranty), is(false));
     }
-
 }
